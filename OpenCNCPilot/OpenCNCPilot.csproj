@@ -63,6 +63,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GCode\GCodeCommands\Arc.cs" />
+    <Compile Include="GCode\GCodeCommands\Command.cs" />
+    <Compile Include="GCode\GCodeCommands\Line.cs" />
+    <Compile Include="GCode\GCodeCommands\MCode.cs" />
+    <Compile Include="GCode\GCodeCommands\Motion.cs" />
+    <Compile Include="GCode\GCodeFile.cs" />
+    <Compile Include="GCode\GCodeParser.cs" />
+    <Compile Include="GCode\ParseException.cs" />
+    <Compile Include="GCode\Vector3.cs" />
     <Compile Include="SettingsBinding.cs" />
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
