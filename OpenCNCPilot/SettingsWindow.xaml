@@ -1,0 +1,25 @@
+﻿<Window x:Class="OpenCNCPilot.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OpenCNCPilot"
+        mc:Ignorable="d"
+        Title="Settings" Height="300" Width="300">
+    <Grid>
+        <TabControl>
+            <TabItem Header="General">
+				
+			</TabItem>
+            <TabItem Header="3D Viewport">
+                <StackPanel Orientation="Vertical">
+                    <CheckBox Content="Show Coordinate System" Margin="5" IsChecked="{local:SettingBinding ViewportShowCoordinateSystem}"/>
+                    <CheckBox Content="Show FPS counter" Margin="5" IsChecked="{local:SettingBinding ViewportShowFpsCounter}"/>
+                </StackPanel>
+			</TabItem>
+            <TabItem Header="Connection">
+				
+			</TabItem>
+		</TabControl>
+    </Grid>
+</Window>

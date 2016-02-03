@@ -10,32 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace OpenCNCPilot
 {
 	/// <summary>
-	/// Interaktionslogik für MainWindow.xaml
+	/// Interaktionslogik für SettingsWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class SettingsWindow : Window
 	{
-		SettingsWindow SettingsWindow = new SettingsWindow();
-
-		public MainWindow()
+		public SettingsWindow()
 		{
 			InitializeComponent();
-		}
-
-		private void Window_Closed(object sender, EventArgs e)
-		{
-			Properties.Settings.Default.Save();
-			SettingsWindow.Close();
-		}
-
-		private void Settings_Click(object sender, RoutedEventArgs e)
-		{
-			SettingsWindow.Show();
 		}
 	}
 }

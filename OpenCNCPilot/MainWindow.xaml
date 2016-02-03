@@ -4,9 +4,46 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OpenCNCPilot"
+		xmlns:h="http://helix-toolkit.org/wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="OpenCNCPilot"
+		Width="{local:SettingBinding MainWindowWidth}"
+		Height="{local:SettingBinding MainWindowHeight}"
+		Closed="Window_Closed">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <GridSplitter Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch"/>
+        <Menu Grid.Row="0" Grid.ColumnSpan="3">
+            <MenuItem Header="File">
+				
+			</MenuItem>
+            <MenuItem Header="Machine">
+				
+			</MenuItem>
+            <MenuItem Header="Settings" Click="Settings_Click"/>
+            <MenuItem Header="About">
+				
+			</MenuItem>
+		</Menu>
+        <h:HelixViewport3D
+			Name="viewport"
+			Grid.Row="1"
+			ShowCoordinateSystem="{local:SettingBinding ViewportShowCoordinateSystem}"
+			ShowFrameRate="{local:SettingBinding ViewportShowFpsCounter}"
+			ShowViewCube="False">
+            <h:HelixViewport3D.Camera>
+                <PerspectiveCamera Position="5, -15, 25" LookDirection="-5, 15,-25" UpDirection="0,0,1"/>
+            </h:HelixViewport3D.Camera>
+            <h:DefaultLights/>
+            <h:CoordinateSystemVisual3D ArrowLengths="3"/>
+        </h:HelixViewport3D>
     </Grid>
 </Window>
