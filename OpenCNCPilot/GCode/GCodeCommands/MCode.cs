@@ -8,6 +8,6 @@ namespace OpenCNCPilot.GCode.GCodeCommands
 {
 	class MCode : Command
 	{
-		int Code;
+		public int Code;
 	}
 }
