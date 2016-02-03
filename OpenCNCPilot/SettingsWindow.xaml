@@ -5,14 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OpenCNCPilot"
         mc:Ignorable="d"
-        Title="Settings" Height="300" Width="300">
+        Title="Settings" Height="500" Width="450">
     <Grid>
-        <TabControl>
+        <TabControl Margin="5">
             <TabItem Header="General">
-				
-			</TabItem>
+                <StackPanel Margin="5">
+                    <DockPanel>
+                        <TextBlock Margin="5">External Editor</TextBlock>
+                        <TextBox Margin="5" Text="{local:SettingBinding ExternalEditorCommandLine}" TextAlignment="Right"/>
+                    </DockPanel>
+                </StackPanel>
+            </TabItem>
             <TabItem Header="3D Viewport">
-                <StackPanel Orientation="Vertical">
+                <StackPanel Margin="5">
                     <CheckBox Content="Show Coordinate System" Margin="5" IsChecked="{local:SettingBinding ViewportShowCoordinateSystem}"/>
                     <CheckBox Content="Show FPS counter" Margin="5" IsChecked="{local:SettingBinding ViewportShowFpsCounter}"/>
                 </StackPanel>

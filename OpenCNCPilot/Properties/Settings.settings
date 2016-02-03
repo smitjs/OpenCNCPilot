@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="OpenCNCPilot" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="OpenCNCPilot.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="MainWindowHeight" Type="System.Int32" Scope="User">
@@ -16,6 +16,9 @@
     </Setting>
     <Setting Name="ViewportShowFpsCounter" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ExternalEditorCommandLine" Type="System.String" Scope="User">
+      <Value Profile="(Default)">notepad {0}</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -22,9 +22,17 @@
         </Grid.ColumnDefinitions>
         <GridSplitter Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch"/>
         <Menu Grid.Row="0" Grid.ColumnSpan="3">
-            <MenuItem Header="File">
-				
-			</MenuItem>
+            <MenuItem Header="GCode">
+                <MenuItem Header="Open"/>
+                <MenuItem Header="Save"/>
+                <MenuItem Header="View in Editor"/>
+            </MenuItem>
+            <MenuItem Header="HeightMap">
+                <MenuItem Header="Open"/>
+                <MenuItem Header="Save"/>
+                <MenuItem Header="Create"/>
+                <MenuItem Header="Generate"/>
+            </MenuItem>
             <MenuItem Header="Machine">
 				
 			</MenuItem>

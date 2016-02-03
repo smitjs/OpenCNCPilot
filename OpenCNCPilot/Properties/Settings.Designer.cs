@@ -82,5 +82,17 @@ namespace OpenCNCPilot.Properties {
                 this["ViewportShowFpsCounter"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("notepad {0}")]
+        public string ExternalEditorCommandLine {
+            get {
+                return ((string)(this["ExternalEditorCommandLine"]));
+            }
+            set {
+                this["ExternalEditorCommandLine"] = value;
+            }
+        }
     }
 }
