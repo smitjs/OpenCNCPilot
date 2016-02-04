@@ -20,5 +20,8 @@
     <Setting Name="ExternalEditorCommandLine" Type="System.String" Scope="User">
       <Value Profile="(Default)">notepad {0}</Value>
     </Setting>
+    <Setting Name="ViewportArcSplit" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

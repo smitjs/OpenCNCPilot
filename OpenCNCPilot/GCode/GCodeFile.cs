@@ -33,10 +33,6 @@ namespace OpenCNCPilot.GCode
 
 		public void GetModel(LinesVisual3D line, LinesVisual3D rapid, LinesVisual3D arc)
 		{
-			/*straight.Points.Clear();
-			rapid.Points.Clear();
-			arc.Points.Clear();*/
-
 			Point3DCollection linePoints = new Point3DCollection();
 			Point3DCollection rapidPoints = new Point3DCollection();
 			Point3DCollection arcPoints = new Point3DCollection();
@@ -59,14 +55,22 @@ namespace OpenCNCPilot.GCode
 					}
 					continue;
 				}
+
+				var a = c as Arc;
+
+				if(a != null)
+				{
+					for(double r = 0; r < 1; r += 0.05)
+					{
+						arcPoints.Add(a.Interpolate(r).ToPoint3D());
+						arcPoints.Add(a.Interpolate(r + 0.05).ToPoint3D());
+					}
+				}
 			}
 
 			line.Points = linePoints;
 			rapid.Points = rapidPoints;
 			arc.Points = arcPoints;
 		}
-
-
-
 	}
 }

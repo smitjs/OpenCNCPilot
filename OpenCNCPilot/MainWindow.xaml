@@ -34,13 +34,13 @@
                 <MenuItem Header="Generate"/>
             </MenuItem>
             <MenuItem Header="Machine">
-				
-			</MenuItem>
+
+            </MenuItem>
             <MenuItem Header="Settings" Click="Settings_Click"/>
             <MenuItem Header="About">
-				
-			</MenuItem>
-		</Menu>
+
+            </MenuItem>
+        </Menu>
         <h:HelixViewport3D
 			Name="viewport"
 			Grid.Row="1"
@@ -52,9 +52,9 @@
             </h:HelixViewport3D.Camera>
             <h:DefaultLights/>
             <h:CoordinateSystemVisual3D ArrowLengths="3"/>
-            <h:LinesVisual3D x:Name="ModelRapid"/>
-            <h:LinesVisual3D x:Name="ModelLine"/>
-            <h:LinesVisual3D x:Name="ModelArc"/>
+            <h:LinesVisual3D Thickness="1" Color="Gray" x:Name="ModelRapid"/>
+            <h:LinesVisual3D Thickness="2" Color="Black" x:Name="ModelLine"/>
+            <h:LinesVisual3D Thickness="2" Color="Blue" x:Name="ModelArc"/>
         </h:HelixViewport3D>
     </Grid>
 </Window>

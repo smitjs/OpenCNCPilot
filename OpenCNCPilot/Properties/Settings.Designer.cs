@@ -94,5 +94,17 @@ namespace OpenCNCPilot.Properties {
                 this["ExternalEditorCommandLine"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public double ViewportArcSplit {
+            get {
+                return ((double)(this["ViewportArcSplit"]));
+            }
+            set {
+                this["ViewportArcSplit"] = value;
+            }
+        }
     }
 }

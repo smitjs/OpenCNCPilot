@@ -20,6 +20,10 @@
                 <StackPanel Margin="5">
                     <CheckBox Content="Show Coordinate System" Margin="5" IsChecked="{local:SettingBinding ViewportShowCoordinateSystem}"/>
                     <CheckBox Content="Show FPS counter" Margin="5" IsChecked="{local:SettingBinding ViewportShowFpsCounter}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Width="60" Margin="5" Text="{local:SettingBinding ViewportArcSplit}"/>
+                        <TextBlock Margin="5">Arc segment length (mm, preview only)</TextBlock> 
+                    </StackPanel>
                 </StackPanel>
 			</TabItem>
             <TabItem Header="Connection">

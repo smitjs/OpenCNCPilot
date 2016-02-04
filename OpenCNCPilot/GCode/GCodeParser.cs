@@ -79,7 +79,7 @@ namespace OpenCNCPilot.GCode
 				if (string.IsNullOrWhiteSpace(line))
 					continue;
 
-				Parse(line, i);
+				Parse(line.ToUpper(), i);
 			}
 		}
 
@@ -303,7 +303,7 @@ namespace OpenCNCPilot.GCode
 
 			#region FindIJK
 			{
-				int ArcIncremental = (State.DistanceMode == ParseDistanceMode.Incremental) ? 1 : 0;
+				int ArcIncremental = (State.ArcDistanceMode == ParseDistanceMode.Incremental) ? 1 : 0;
 
 				for (int i = 0; i < Words.Count; i++)
 				{
@@ -441,6 +441,8 @@ namespace OpenCNCPilot.GCode
 			arc.U = U;
 			arc.V = V;
 			arc.Plane = State.Plane;
+
+			Console.WriteLine($"Arc from {arc.Start} to {arc.End} in {arc.Direction} with U{arc.U} V{arc.V} in {arc.Plane}");
 
 			State.Commands.Add(arc);
 			State.Position = EndPos;
