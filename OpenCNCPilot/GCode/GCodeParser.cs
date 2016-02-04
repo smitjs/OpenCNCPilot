@@ -9,19 +9,19 @@ using System.Text.RegularExpressions;
 
 namespace OpenCNCPilot.GCode
 {
-	enum ParseDistanceMode
+	public enum ParseDistanceMode
 	{
 		Absolute,
 		Incremental
 	}
 
-	enum ParseUnit
+	public enum ParseUnit
 	{
 		MM,
 		In
 	}
 
-	class ParserState
+	public class ParserState
 	{
 		public Vector3 Position;
 		public ArcPlane Plane;
@@ -37,20 +37,19 @@ namespace OpenCNCPilot.GCode
 	struct Word
 	{
 		public char Command;
-		public float Parameter;
+		public double Parameter;
 	}
 
-	public class GCodeParser
+	public static class GCodeParser
 	{
-		ParserState State;
+		public static ParserState State;
 
 		private static Regex GCodeSplitter = new Regex(@"([A-Z])\s*(\-?\d+\.?\d*)", RegexOptions.Compiled);
 		private static double[] MotionCommands = new double[] { 0, 1, 2, 3 };
+		private static string ValidWords = "GMXYZIJKFR";
 
-		public GCodeParser()
+		public static void Reset()
 		{
-			State = new ParserState();
-
 			State.Position = new Vector3();
 			State.Plane = ArcPlane.XY;
 			State.Feed = 100;
@@ -62,7 +61,14 @@ namespace OpenCNCPilot.GCode
 			State.Commands = new List<Command>();
 		}
 
-		public void ParseFile(string path)
+		static GCodeParser()
+		{
+			State = new ParserState();
+
+			Reset();
+		}
+
+		public static void ParseFile(string path)
 		{
 			string[] file = File.ReadAllLines(path);
 
@@ -77,7 +83,7 @@ namespace OpenCNCPilot.GCode
 			}
 		}
 
-		string CleanupLine(string line, int lineNumber)
+		static string CleanupLine(string line, int lineNumber)
 		{
 			int commentIndex = line.IndexOf(';');
 
@@ -98,7 +104,7 @@ namespace OpenCNCPilot.GCode
 			return line;
 		}
 
-		void Parse(string line, int lineNumber)
+		static void Parse(string line, int lineNumber)
 		{
 			MatchCollection matches = GCodeSplitter.Matches(line);
 
@@ -106,11 +112,16 @@ namespace OpenCNCPilot.GCode
 
 			foreach (Match match in matches)
 			{
-				Words.Add(new Word() { Command = match.Groups[1].Value[0], Parameter = int.Parse(match.Groups[2].Value) });
+				Words.Add(new Word() { Command = match.Groups[1].Value[0], Parameter = double.Parse(match.Groups[2].Value, System.Globalization.CultureInfo.InvariantCulture) });
 			}
 
 			for (int i = 0; i < Words.Count; i++)
 			{
+				if (!ValidWords.Contains(Words[i].Command))
+				{
+					Words.RemoveAt(i);
+					continue;
+				}
 				if (Words[i].Command != 'F')
 					continue;
 				State.Feed = Words.First().Parameter;
@@ -137,7 +148,7 @@ namespace OpenCNCPilot.GCode
 				{
 					#region UnitPlaneDistanceMode
 
-					float param = Words.First().Parameter;
+					double param = Words.First().Parameter;
 
 					if (param == 90)
 					{
@@ -199,12 +210,6 @@ namespace OpenCNCPilot.GCode
 					#endregion
 				}
 
-				if (Words.First().Command == 'T')
-				{
-					Words.RemoveAt(0);  //no toolchanges supported
-					continue;
-				}
-
 				break;
 			}
 
@@ -223,6 +228,8 @@ namespace OpenCNCPilot.GCode
 			if (MotionMode < 0)
 				throw new ParseException("No Motion Mode active", lineNumber);
 
+			double UnitMultiplier = (State.Unit == ParseUnit.MM) ? 1 : 25.4;
+
 			Vector3 EndPos = State.Position;
 
 			#region FindEndPos
@@ -233,7 +240,7 @@ namespace OpenCNCPilot.GCode
 				{
 					if (Words[i].Command != 'X')
 						continue;
-					EndPos.X = Words[i].Parameter + Incremental * EndPos.X;
+					EndPos.X = Words[i].Parameter * UnitMultiplier + Incremental * EndPos.X;
 					Words.RemoveAt(i);
 					break;
 				}
@@ -242,7 +249,7 @@ namespace OpenCNCPilot.GCode
 				{
 					if (Words[i].Command != 'Y')
 						continue;
-					EndPos.Y = Words[i].Parameter + Incremental * EndPos.Y;
+					EndPos.Y = Words[i].Parameter * UnitMultiplier + Incremental * EndPos.Y;
 					Words.RemoveAt(i);
 					break;
 				}
@@ -251,7 +258,7 @@ namespace OpenCNCPilot.GCode
 				{
 					if (Words[i].Command != 'Z')
 						continue;
-					EndPos.Z = Words[i].Parameter + Incremental * EndPos.Z;
+					EndPos.Z = Words[i].Parameter * UnitMultiplier + Incremental * EndPos.Z;
 					Words.RemoveAt(i);
 					break;
 				}
@@ -306,12 +313,12 @@ namespace OpenCNCPilot.GCode
 					switch(State.Plane)
 					{
 						case ArcPlane.XY:
-							U = Words[i].Parameter + ArcIncremental * State.Position.X;
+							U = Words[i].Parameter * UnitMultiplier + ArcIncremental * State.Position.X;
                             break;
 						case ArcPlane.YZ:
 							throw new ParseException("Current Plane is YZ, I word is invalid", lineNumber);
 						case ArcPlane.ZX:
-							V = Words[i].Parameter + ArcIncremental * State.Position.X;
+							V = Words[i].Parameter * UnitMultiplier + ArcIncremental * State.Position.X;
 							break;
 					}
 
@@ -328,10 +335,10 @@ namespace OpenCNCPilot.GCode
 					switch (State.Plane)
 					{
 						case ArcPlane.XY:
-							V = Words[i].Parameter + ArcIncremental * State.Position.Y;
+							V = Words[i].Parameter * UnitMultiplier + ArcIncremental * State.Position.Y;
 							break;
 						case ArcPlane.YZ:
-							U = Words[i].Parameter + ArcIncremental * State.Position.Y;
+							U = Words[i].Parameter * UnitMultiplier + ArcIncremental * State.Position.Y;
 							break;
 						case ArcPlane.ZX:
 							throw new ParseException("Current Plane is ZX, J word is invalid", lineNumber);
@@ -352,10 +359,10 @@ namespace OpenCNCPilot.GCode
 						case ArcPlane.XY:
 							throw new ParseException("Current Plane is XY, K word is invalid", lineNumber);
 						case ArcPlane.YZ:
-							V = Words[i].Parameter + ArcIncremental * State.Position.Z;
+							V = Words[i].Parameter * UnitMultiplier + ArcIncremental * State.Position.Z;
 							break;
 						case ArcPlane.ZX:
-							U = Words[i].Parameter + ArcIncremental * State.Position.Z;
+							U = Words[i].Parameter * UnitMultiplier + ArcIncremental * State.Position.Z;
 							break;
 					}
 
@@ -378,7 +385,7 @@ namespace OpenCNCPilot.GCode
 				if (State.Position == EndPos)
 					throw new ParseException("arcs in R-notation must have non-coincident start and end points", lineNumber);
 
-				double Radius = Words[i].Parameter;
+				double Radius = Words[i].Parameter * UnitMultiplier;
 
 				if (Radius == 0)
 					throw new ParseException("Radius can't be zero", lineNumber);

@@ -23,7 +23,7 @@
         <GridSplitter Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch"/>
         <Menu Grid.Row="0" Grid.ColumnSpan="3">
             <MenuItem Header="GCode">
-                <MenuItem Header="Open"/>
+                <MenuItem Header="Open" Click="MenuOpenGCode_Click"/>
                 <MenuItem Header="Save"/>
                 <MenuItem Header="View in Editor"/>
             </MenuItem>
@@ -52,6 +52,9 @@
             </h:HelixViewport3D.Camera>
             <h:DefaultLights/>
             <h:CoordinateSystemVisual3D ArrowLengths="3"/>
+            <h:LinesVisual3D x:Name="ModelRapid"/>
+            <h:LinesVisual3D x:Name="ModelLine"/>
+            <h:LinesVisual3D x:Name="ModelArc"/>
         </h:HelixViewport3D>
     </Grid>
 </Window>
