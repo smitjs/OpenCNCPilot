@@ -29,6 +29,7 @@ namespace OpenCNCPilot.GCode
 		public ParseDistanceMode DistanceMode;
 		public ParseDistanceMode ArcDistanceMode;
 		public ParseUnit Unit;
+		public int LastMotionMode;
 
 		public List<Command> Commands;
 	}
@@ -44,6 +45,7 @@ namespace OpenCNCPilot.GCode
 		ParserState State;
 
 		private static Regex GCodeSplitter = new Regex(@"([A-Z])\s*(\-?\d+\.?\d*)", RegexOptions.Compiled);
+		private static double[] MotionCommands = new double[] { 0, 1, 2, 3 };
 
 		public GCodeParser()
 		{
@@ -55,6 +57,7 @@ namespace OpenCNCPilot.GCode
 			State.DistanceMode = ParseDistanceMode.Absolute;
 			State.ArcDistanceMode = ParseDistanceMode.Incremental;
 			State.Unit = ParseUnit.MM;
+			State.LastMotionMode = -1;
 
 			State.Commands = new List<Command>();
 		}
@@ -106,13 +109,22 @@ namespace OpenCNCPilot.GCode
 				Words.Add(new Word() { Command = match.Groups[1].Value[0], Parameter = int.Parse(match.Groups[2].Value) });
 			}
 
+			for (int i = 0; i < Words.Count; i++)
+			{
+				if (Words[i].Command != 'F')
+					continue;
+				State.Feed = Words.First().Parameter;
+				Words.RemoveAt(i);
+				continue;
+			}
+
 			while (Words.Count > 0)
 			{
 				if (Words.First().Command == 'M')
 				{
 					int param = (int)Words.First().Parameter;
 
-					if (param != Words.First().Parameter)
+					if (param != Words.First().Parameter || param < 0)
 						throw new ParseException("MCode can only have integer parameters", lineNumber);
 
 					State.Commands.Add(new MCode() { Code = param });
@@ -121,8 +133,10 @@ namespace OpenCNCPilot.GCode
 					continue;
 				}
 
-				if (Words.First().Command == 'G')
+				if (Words.First().Command == 'G' && !MotionCommands.Contains(Words.First().Parameter))
 				{
+					#region UnitPlaneDistanceMode
+
 					float param = Words.First().Parameter;
 
 					if (param == 90)
@@ -179,137 +193,251 @@ namespace OpenCNCPilot.GCode
 						Words.RemoveAt(0);
 						continue;
 					}
-					if(param == 0 || param == 1 || param == 2 || param == 3)
-					{
-						Words.RemoveAt(0);
 
-						for(int i = 0; i < Words.Count; i++)
-						{
-							if (Words[i].Command != 'F')
-								continue;
-							State.Feed = Words[i].Parameter;
-							Words.RemoveAt(i);
-						}
-
-						Vector3 EndPos = State.Position;
-
-						int Incremental = (State.DistanceMode == ParseDistanceMode.Incremental) ? 1 : 0;
-
-						for (int i = 0; i < Words.Count; i++)
-						{
-							if (Words[i].Command != 'X')
-								continue;
-							EndPos.X = Words[i].Parameter + Incremental * EndPos.X;
-							Words.RemoveAt(i);
-							break;
-						}
-
-						for (int i = 0; i < Words.Count; i++)
-						{
-							if (Words[i].Command != 'Y')
-								continue;
-							EndPos.Y = Words[i].Parameter + Incremental * EndPos.Y;
-							Words.RemoveAt(i);
-							break;
-						}
-
-						for (int i = 0; i < Words.Count; i++)
-						{
-							if (Words[i].Command != 'Z')
-								continue;
-							EndPos.Z = Words[i].Parameter + Incremental * EndPos.Z;
-							Words.RemoveAt(i);
-							break;
-						}
-
-						if(param  <= 1)
-						{
-							Line l = new Line();
-							l.Start = State.Position;
-							l.End = EndPos;
-							l.Rapid = param == 0;
-							l.Feed = State.Feed;
-
-							State.Commands.Add(l);
-						}
-						else
-						{
-							Vector3 ArcCenter = State.Position;
-
-							int ArcIncremental = (State.DistanceMode == ParseDistanceMode.Incremental) ? 1 : 0;
-
-							if (State.Plane != ArcPlane.YZ)
-							{
-								for (int i = 0; i < Words.Count; i++)
-								{
-									if (Words[i].Command != 'I')
-										continue;
-									EndPos.X = Words[i].Parameter + ArcIncremental * ArcCenter.X;
-									Words.RemoveAt(i);
-									break;
-								}
-							}
-
-							if (State.Plane != ArcPlane.ZX)
-							{
-								for (int i = 0; i < Words.Count; i++)
-								{
-									if (Words[i].Command != 'J')
-										continue;
-									EndPos.Y = Words[i].Parameter + ArcIncremental * ArcCenter.Y;
-									Words.RemoveAt(i);
-									break;
-								}
-							}
-
-							if (State.Plane != ArcPlane.XY)
-							{
-								for (int i = 0; i < Words.Count; i++)
-								{
-									if (Words[i].Command != 'K')
-										continue;
-									EndPos.Z = Words[i].Parameter + ArcIncremental * ArcCenter.Z;
-									Words.RemoveAt(i);
-									break;
-								}
-							}
-
-							for (int i = 0; i < Words.Count; i++)
-							{
-								if (Words[i].Command != 'R')
-									continue;
-
-								if (ArcCenter == State.Position)
-									throw new ParseException("both IJK and R centers defined", lineNumber);
-
-								double radius = Words[i].Parameter;
-
-
-
-
-
-
-
-								Words.RemoveAt(i);
-								break;
-							}
-						}
-
-						if (Words.Count > 0)
-							throw new ParseException("unused words in block", lineNumber);
-					}
-
+					Words.RemoveAt(0);  //unsupported G-Command
+					continue;
+					#endregion
 				}
 
-				if (Words.First().Command == 'F')
+				if (Words.First().Command == 'T')
 				{
-					State.Feed = Words.First().Parameter;
-					Words.RemoveAt(0);
+					Words.RemoveAt(0);  //no toolchanges supported
 					continue;
 				}
 
+				break;
+			}
+
+			if (Words.Count == 0)
+				return;
+
+			int MotionMode = State.LastMotionMode;
+
+			if (Words.First().Command == 'G')
+			{
+				MotionMode = (int)Words.First().Parameter;
+				State.LastMotionMode = MotionMode;
 				Words.RemoveAt(0);
 			}
+
+			if (MotionMode < 0)
+				throw new ParseException("No Motion Mode active", lineNumber);
+
+			Vector3 EndPos = State.Position;
+
+			#region FindEndPos
+			{
+				int Incremental = (State.DistanceMode == ParseDistanceMode.Incremental) ? 1 : 0;
+
+				for (int i = 0; i < Words.Count; i++)
+				{
+					if (Words[i].Command != 'X')
+						continue;
+					EndPos.X = Words[i].Parameter + Incremental * EndPos.X;
+					Words.RemoveAt(i);
+					break;
+				}
+
+				for (int i = 0; i < Words.Count; i++)
+				{
+					if (Words[i].Command != 'Y')
+						continue;
+					EndPos.Y = Words[i].Parameter + Incremental * EndPos.Y;
+					Words.RemoveAt(i);
+					break;
+				}
+
+				for (int i = 0; i < Words.Count; i++)
+				{
+					if (Words[i].Command != 'Z')
+						continue;
+					EndPos.Z = Words[i].Parameter + Incremental * EndPos.Z;
+					Words.RemoveAt(i);
+					break;
+				}
+			}
+			#endregion
+
+			if (MotionMode <= 1)
+			{
+				if (Words.Count > 0)
+					throw new ParseException("Motion Command must be last in line (unused Words in Block)", lineNumber);
+
+				Line motion = new Line();
+				motion.Start = State.Position;
+				motion.End = EndPos;
+				motion.Feed = State.Feed;
+				motion.Rapid = MotionMode == 0;
+
+				State.Commands.Add(motion);
+				State.Position = EndPos;
+				return;
+			}
+
+			double U, V;
+
+			bool IJKused = false;
+
+			switch (State.Plane)
+			{
+				default:
+					U = State.Position.X;
+					V = State.Position.Y;
+					break;
+				case ArcPlane.YZ:
+					U = State.Position.Y;
+					V = State.Position.Z;
+					break;
+				case ArcPlane.ZX:
+					U = State.Position.Z;
+					V = State.Position.X;
+					break;
+			}
+
+			#region FindIJK
+			{
+				int ArcIncremental = (State.DistanceMode == ParseDistanceMode.Incremental) ? 1 : 0;
+
+				for (int i = 0; i < Words.Count; i++)
+				{
+					if (Words[i].Command != 'I')
+						continue;
+
+					switch(State.Plane)
+					{
+						case ArcPlane.XY:
+							U = Words[i].Parameter + ArcIncremental * State.Position.X;
+                            break;
+						case ArcPlane.YZ:
+							throw new ParseException("Current Plane is YZ, I word is invalid", lineNumber);
+						case ArcPlane.ZX:
+							V = Words[i].Parameter + ArcIncremental * State.Position.X;
+							break;
+					}
+
+					IJKused = true;
+					Words.RemoveAt(i);
+					break;
+				}
+
+				for (int i = 0; i < Words.Count; i++)
+				{
+					if (Words[i].Command != 'J')
+						continue;
+
+					switch (State.Plane)
+					{
+						case ArcPlane.XY:
+							V = Words[i].Parameter + ArcIncremental * State.Position.Y;
+							break;
+						case ArcPlane.YZ:
+							U = Words[i].Parameter + ArcIncremental * State.Position.Y;
+							break;
+						case ArcPlane.ZX:
+							throw new ParseException("Current Plane is ZX, J word is invalid", lineNumber);
+					}
+
+					IJKused = true;
+					Words.RemoveAt(i);
+					break;
+				}
+
+				for (int i = 0; i < Words.Count; i++)
+				{
+					if (Words[i].Command != 'K')
+						continue;
+
+					switch (State.Plane)
+					{
+						case ArcPlane.XY:
+							throw new ParseException("Current Plane is XY, K word is invalid", lineNumber);
+						case ArcPlane.YZ:
+							V = Words[i].Parameter + ArcIncremental * State.Position.Z;
+							break;
+						case ArcPlane.ZX:
+							U = Words[i].Parameter + ArcIncremental * State.Position.Z;
+							break;
+					}
+
+					IJKused = true;
+					Words.RemoveAt(i);
+					break;
+				}
+			}
+			#endregion
+
+			#region ResolveRadius
+			for (int i = 0; i < Words.Count; i++)
+			{
+				if (Words[i].Command != 'R')
+					continue;
+
+				if (IJKused)
+					throw new ParseException("Both IJK and R notation used", lineNumber);
+
+				if (State.Position == EndPos)
+					throw new ParseException("arcs in R-notation must have non-coincident start and end points", lineNumber);
+
+				double Radius = Words[i].Parameter;
+
+				if (Radius == 0)
+					throw new ParseException("Radius can't be zero", lineNumber);
+
+				double A, B;
+
+				switch (State.Plane)
+				{
+					default:
+						A = EndPos.X;
+						B = EndPos.Y;
+						break;
+					case ArcPlane.YZ:
+						A = EndPos.Y;
+						B = EndPos.Z;
+						break;
+					case ArcPlane.ZX:
+						A = EndPos.Z;
+						B = EndPos.X;
+						break;
+				}
+
+				A -= U;		//(AB) = vector from start to end of arc along the axes of the current plane
+				B -= V;
+
+				double C = -B;	//(UV) = vector perpendicular to (AB)
+				double D = A;
+
+				{	//normalize perpendicular vector
+					double perpLength = Math.Sqrt(C * C + D * D);
+					C /= perpLength;
+					D /= perpLength;
+				}
+
+				double PerpLength = Math.Sqrt((Radius * Radius) - ((A * A + B * B) / 4));
+
+				if (MotionMode == 3 ^ Radius < 0)
+					PerpLength = -PerpLength;
+
+				U += (A / 2) + C * (PerpLength);
+				V += (B / 2) + (D * PerpLength);
+
+				Words.RemoveAt(i);
+				break;
+			}
+			#endregion
+
+			Arc arc = new Arc();
+			arc.Start = State.Position;
+			arc.End = EndPos;
+			arc.Feed = State.Feed;
+			arc.Direction = (MotionMode == 2) ? ArcDirection.CW : ArcDirection.CCW;
+			arc.U = U;
+			arc.V = V;
+			arc.Plane = State.Plane;
+
+			State.Commands.Add(arc);
+			State.Position = EndPos;
+			return;
 		}
 	}
 }

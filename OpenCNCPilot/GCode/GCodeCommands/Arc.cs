@@ -23,5 +23,7 @@ namespace OpenCNCPilot.GCode.GCodeCommands
 	{
 		public ArcPlane Plane;
 		public ArcDirection Direction;
+		public double U;	//absolute position of center in first axis of plane
+		public double V;	//absolute position of center in second axis of plane
 	}
 }
