@@ -25,18 +25,22 @@
                         <TextBlock Margin="5">Arc segment length (mm, preview only)</TextBlock> 
                     </StackPanel>
                     <CheckBox Content="Show Grid" Margin="5" IsChecked="{local:SettingBinding ViewportShowGrid}"/>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBox Width="60" Margin="5" Text="{local:SettingBinding ViewportGridMinor}"/>
-                        <TextBlock Margin="5">Grid Minor Distance</TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBox Width="60" Margin="5" Text="{local:SettingBinding ViewportGridMajor}"/>
-                        <TextBlock Margin="5">Grid Major Distance</TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBox Width="60" Margin="5" Text="{local:SettingBinding ViewportGridStroke}"/>
-                        <TextBlock Margin="5">Grid Stroke Width</TextBlock>
-                    </StackPanel>
+                    <GroupBox IsEnabled="{local:SettingBinding ViewportShowGrid}">
+                        <StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<TextBox Width="60" Margin="5" Text="{local:SettingBinding ViewportGridMinor}"/>
+								<TextBlock Margin="5">Grid Minor Distance</TextBlock>
+							</StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<TextBox Width="60" Margin="5" Text="{local:SettingBinding ViewportGridMajor}"/>
+								<TextBlock Margin="5">Grid Major Distance</TextBlock>
+							</StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<TextBox Width="60" Margin="5" Text="{local:SettingBinding ViewportGridStroke}"/>
+								<TextBlock Margin="5">Grid Stroke Width</TextBlock>
+							</StackPanel>
+                        </StackPanel>
+                    </GroupBox>
                 </StackPanel>
 			</TabItem>
             <TabItem Header="Connection">
