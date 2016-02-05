@@ -106,5 +106,53 @@ namespace OpenCNCPilot.Properties {
                 this["ViewportArcSplit"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.05")]
+        public double ViewportGridStroke {
+            get {
+                return ((double)(this["ViewportGridStroke"]));
+            }
+            set {
+                this["ViewportGridStroke"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public double ViewportGridMinor {
+            get {
+                return ((double)(this["ViewportGridMinor"]));
+            }
+            set {
+                this["ViewportGridMinor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public double ViewportGridMajor {
+            get {
+                return ((double)(this["ViewportGridMajor"]));
+            }
+            set {
+                this["ViewportGridMajor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ViewportShowGrid {
+            get {
+                return ((bool)(this["ViewportShowGrid"]));
+            }
+            set {
+                this["ViewportShowGrid"] = value;
+            }
+        }
     }
 }

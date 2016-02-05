@@ -1560,6 +1560,7 @@ namespace OpenCNCPilot.GCode
 		{
 			return new Point3D(X, Y, Z);
 		}
+
 		public Vector3 RollComponents(int turns)
 		{
 			Vector3 roll = new Vector3();

@@ -14,9 +14,34 @@ namespace OpenCNCPilot.GCode
 	{
 		public List<Command> Toolpath;
 
+		public Vector3 Min = Vector3.MaxValue;
+		public Vector3 Max = Vector3.MinValue;
+		public Vector3 Size;
+
+
 		private GCodeFile(List<Command> toolpath)
 		{
 			Toolpath = toolpath;
+
+			foreach (Motion m in Enumerable.Concat<Motion>(Toolpath.OfType<Line>(), Toolpath.OfType<Arc>().SelectMany(a => a.Split(0.1))))
+			{
+				for(int i = 0; i < 3; i++)
+				{
+					if (m.End[i] > Max[i])
+						Max[i] = m.End[i];
+
+					if (m.End[i] < Min[i])
+						Min[i] = m.End[i];
+				}
+			}
+
+			Size = Max - Min;
+
+			for(int i = 0; i < 3; i++)
+			{
+				if (Size[i] < 0)
+					Size[i] = 0;
+			}
 		}
 
 		public static GCodeFile Load(string path)

@@ -24,6 +24,7 @@ namespace OpenCNCPilot
 	public partial class MainWindow : Window
 	{
 		SettingsWindow SettingsWindow = new SettingsWindow();
+
 		GCodeFile toolpath = GCodeFile.Empty();
 		GCodeFile Toolpath
 		{
@@ -31,10 +32,16 @@ namespace OpenCNCPilot
 			set
 			{
 				toolpath = value;
-				Console.WriteLine("starting visualization");
-				Toolpath.GetModel(ModelLine, ModelRapid, ModelArc);
-			}	//add 3d update
+				UpdateViewport();
+			}
 		}
+
+		void UpdateViewport()
+		{
+			Toolpath.GetModel(ModelLine, ModelRapid, ModelArc);
+		}
+
+
 
 		public MainWindow()
 		{

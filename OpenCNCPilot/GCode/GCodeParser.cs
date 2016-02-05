@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OpenCNCPilot.GCode.GCodeCommands;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -420,7 +418,12 @@ namespace OpenCNCPilot.GCode
 					D /= perpLength;
 				}
 
-				double PerpLength = Math.Sqrt((Radius * Radius) - ((A * A + B * B) / 4));
+				double PerpSquare = (Radius * Radius) - ((A * A + B * B) / 4);
+
+				if (PerpSquare < 0)
+					throw new ParseException("Radius too small to reach both ends", lineNumber);
+
+				double PerpLength = Math.Sqrt(PerpSquare);
 
 				if (MotionMode == 3 ^ Radius < 0)
 					PerpLength = -PerpLength;
@@ -441,8 +444,6 @@ namespace OpenCNCPilot.GCode
 			arc.U = U;
 			arc.V = V;
 			arc.Plane = State.Plane;
-
-			Console.WriteLine($"Arc from {arc.Start} to {arc.End} in {arc.Direction} with U{arc.U} V{arc.V} in {arc.Plane} spanning {arc.AngleSpan} from {arc.StartAngle} to {arc.EndAngle}");
 
 			State.Commands.Add(arc);
 			State.Position = EndPos;

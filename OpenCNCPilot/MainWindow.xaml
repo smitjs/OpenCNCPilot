@@ -55,6 +55,13 @@
             <h:LinesVisual3D Thickness="1" Color="Gray" x:Name="ModelRapid"/>
             <h:LinesVisual3D Thickness="2" Color="Black" x:Name="ModelLine"/>
             <h:LinesVisual3D Thickness="2" Color="Blue" x:Name="ModelArc"/>
+            <h:GridLinesVisual3D 
+				x:Name="ModelGrid"
+				MinorDistance="{local:SettingBinding ViewportGridMinor}"
+				MajorDistance="{local:SettingBinding ViewportGridMajor}"
+				Thickness="{local:SettingBinding ViewportGridStroke}"
+				Visible="{local:SettingBinding ViewportShowGrid}"
+				Width="10" Length="10"/>
         </h:HelixViewport3D>
     </Grid>
 </Window>
