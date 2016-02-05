@@ -9,8 +9,8 @@ namespace OpenCNCPilot.GCode.GCodeCommands
 	public enum ArcPlane
 	{
 		XY = 0,
-		ZX = 1,
-		YZ = 2
+		YZ = 1,
+        ZX = 2
 	}
 
 	public enum ArcDirection
@@ -115,7 +115,7 @@ namespace OpenCNCPilot.GCode.GCodeCommands
 
 			Vector3 lastEnd = Start;
 
-			for(int i = 1; i < divisions; i++)
+			for(int i = 1; i <= divisions; i++)
 			{
 				Vector3 end = Interpolate(((double)i) / divisions);
 

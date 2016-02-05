@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HelixToolkit.Wpf;
 using System.Windows.Media.Media3D;
+using OpenCNCPilot.Properties;
 
 namespace OpenCNCPilot.GCode
 {
@@ -60,12 +61,10 @@ namespace OpenCNCPilot.GCode
 
 				if(a != null)
 				{
-					double delta = 0.025;
-
-					for(double r = 0; r < 1; r += delta)
+					foreach(Motion sub in a.Split(Settings.Default.ViewportArcSplit))
 					{
-						arcPoints.Add(a.Interpolate(r).ToPoint3D());
-						arcPoints.Add(a.Interpolate(r + delta).ToPoint3D());
+						arcPoints.Add(sub.Start.ToPoint3D());
+						arcPoints.Add(sub.End.ToPoint3D());
 					}
 				}
 			}
