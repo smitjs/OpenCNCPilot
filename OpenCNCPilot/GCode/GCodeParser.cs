@@ -442,7 +442,7 @@ namespace OpenCNCPilot.GCode
 			arc.V = V;
 			arc.Plane = State.Plane;
 
-			Console.WriteLine($"Arc from {arc.Start} to {arc.End} in {arc.Direction} with U{arc.U} V{arc.V} in {arc.Plane}");
+			Console.WriteLine($"Arc from {arc.Start} to {arc.End} in {arc.Direction} with U{arc.U} V{arc.V} in {arc.Plane} spanning {arc.AngleSpan} from {arc.StartAngle} to {arc.EndAngle}");
 
 			State.Commands.Add(arc);
 			State.Position = EndPos;

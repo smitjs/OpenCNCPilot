@@ -30,7 +30,7 @@ namespace OpenCNCPilot.GCode.GCodeCommands
 		{
 			get
 			{
-				throw new NotImplementedException();
+				return Math.Abs(AngleSpan * Radius);
 			}
 		}
 
@@ -93,7 +93,7 @@ namespace OpenCNCPilot.GCode.GCodeCommands
 
 		public override Vector3 Interpolate(double ratio)
 		{
-			double angle = StartAngle + AngleSpan * ratio * ((Direction == ArcDirection.CCW) ? 1 : -1);
+			double angle = StartAngle + AngleSpan * ratio;
 
 			Vector3 onPlane = new Vector3(U + (Radius * Math.Cos(angle)), V + (Radius * Math.Sin(angle)), 0);
 
@@ -101,12 +101,37 @@ namespace OpenCNCPilot.GCode.GCodeCommands
 
 			onPlane.Z = helix;
 
-			return onPlane.RollComponents((int)Plane);
+			Vector3 interpolation = onPlane.RollComponents((int)Plane);
+
+			return interpolation;
 		}
 
 		public override IEnumerable<Motion> Split(double length)
 		{
-			throw new NotImplementedException();
+			int divisions = (int)Math.Ceiling(Length / length);
+
+			if (divisions < 1)
+				divisions = 1;
+
+			Vector3 lastEnd = Start;
+
+			for(int i = 1; i < divisions; i++)
+			{
+				Vector3 end = Interpolate(((double)i) / divisions);
+
+				Arc immediate = new Arc();
+				immediate.Start = lastEnd;
+				immediate.End = end;
+				immediate.Feed = Feed;
+				immediate.Direction = Direction;
+				immediate.Plane = Plane;
+				immediate.U = U;
+				immediate.V = V;
+
+				yield return immediate;
+
+				lastEnd = end;
+			}
 		}
 	}
 }

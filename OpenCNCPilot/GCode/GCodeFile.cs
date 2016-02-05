@@ -60,10 +60,12 @@ namespace OpenCNCPilot.GCode
 
 				if(a != null)
 				{
-					for(double r = 0; r < 1; r += 0.05)
+					double delta = 0.025;
+
+					for(double r = 0; r < 1; r += delta)
 					{
 						arcPoints.Add(a.Interpolate(r).ToPoint3D());
-						arcPoints.Add(a.Interpolate(r + 0.05).ToPoint3D());
+						arcPoints.Add(a.Interpolate(r + delta).ToPoint3D());
 					}
 				}
 			}
