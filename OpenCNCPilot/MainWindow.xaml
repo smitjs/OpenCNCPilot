@@ -24,7 +24,7 @@
         <Menu Grid.Row="0" Grid.ColumnSpan="3">
             <MenuItem Header="GCode">
                 <MenuItem Header="Open" Click="MenuOpenGCode_Click"/>
-                <MenuItem Header="Save"/>
+                <MenuItem Header="Save" Click="MenuSaveGCode_Click"/>
                 <MenuItem Header="View in Editor"/>
             </MenuItem>
             <MenuItem Header="HeightMap">
@@ -48,13 +48,16 @@
 			ShowFrameRate="{local:SettingBinding ViewportShowFpsCounter}"
 			ShowViewCube="False">
             <h:HelixViewport3D.Camera>
-                <PerspectiveCamera Position="5, -15, 25" LookDirection="-5, 15,-25" UpDirection="0,0,1"/>
+                <PerspectiveCamera
+					Position="5, -15, 25"
+					LookDirection="-5, 15,-25"
+					UpDirection="0,0,1"/>
             </h:HelixViewport3D.Camera>
             <h:DefaultLights/>
             <h:CoordinateSystemVisual3D ArrowLengths="3"/>
-            <h:LinesVisual3D Thickness="1" Color="Gray" x:Name="ModelRapid"/>
-            <h:LinesVisual3D Thickness="2" Color="Black" x:Name="ModelLine"/>
-            <h:LinesVisual3D Thickness="2" Color="Blue" x:Name="ModelArc"/>
+            <h:LinesVisual3D Thickness="0.5" Color="Gray" x:Name="ModelRapid"/>
+            <h:LinesVisual3D Thickness="1" Color="Black" x:Name="ModelLine"/>
+            <h:LinesVisual3D Thickness="1" Color="Blue" x:Name="ModelArc"/>
             <h:GridLinesVisual3D 
 				x:Name="ModelGrid"
 				MinorDistance="{local:SettingBinding ViewportGridMinor}"

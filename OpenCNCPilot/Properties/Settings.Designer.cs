@@ -154,5 +154,17 @@ namespace OpenCNCPilot.Properties {
                 this["ViewportShowGrid"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public byte OutputDecimalDigits {
+            get {
+                return ((byte)(this["OutputDecimalDigits"]));
+            }
+            set {
+                this["OutputDecimalDigits"] = value;
+            }
+        }
     }
 }

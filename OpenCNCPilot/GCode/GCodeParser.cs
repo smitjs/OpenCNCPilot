@@ -29,7 +29,16 @@ namespace OpenCNCPilot.GCode
 		public ParseUnit Unit;
 		public int LastMotionMode;
 
-		public List<Command> Commands;
+		public ParserState()
+		{
+			Position = new Vector3();
+			Plane = ArcPlane.XY;
+			Feed = 100;
+			DistanceMode = ParseDistanceMode.Absolute;
+			ArcDistanceMode = ParseDistanceMode.Incremental;
+			Unit = ParseUnit.MM;
+			LastMotionMode = -1;
+		}
 	}
 
 	struct Word
@@ -45,18 +54,12 @@ namespace OpenCNCPilot.GCode
 		private static Regex GCodeSplitter = new Regex(@"([A-Z])\s*(\-?\d+\.?\d*)", RegexOptions.Compiled);
 		private static double[] MotionCommands = new double[] { 0, 1, 2, 3 };
 		private static string ValidWords = "GMXYZIJKFR";
+		public static List<Command> Commands;
 
 		public static void Reset()
 		{
-			State.Position = new Vector3();
-			State.Plane = ArcPlane.XY;
-			State.Feed = 100;
-			State.DistanceMode = ParseDistanceMode.Absolute;
-			State.ArcDistanceMode = ParseDistanceMode.Incremental;
-			State.Unit = ParseUnit.MM;
-			State.LastMotionMode = -1;
-
-			State.Commands = new List<Command>();
+			State = new ParserState();
+			Commands = new List<Command>();	//don't reuse, might be used elsewhere
 		}
 
 		static GCodeParser()
@@ -122,7 +125,7 @@ namespace OpenCNCPilot.GCode
 				}
 				if (Words[i].Command != 'F')
 					continue;
-				State.Feed = Words.First().Parameter;
+				State.Feed = Words[i].Parameter;
 				Words.RemoveAt(i);
 				continue;
 			}
@@ -136,7 +139,7 @@ namespace OpenCNCPilot.GCode
 					if (param != Words.First().Parameter || param < 0)
 						throw new ParseException("MCode can only have integer parameters", lineNumber);
 
-					State.Commands.Add(new MCode() { Code = param });
+					Commands.Add(new MCode() { Code = param });
 
 					Words.RemoveAt(0);
 					continue;
@@ -274,7 +277,7 @@ namespace OpenCNCPilot.GCode
 				motion.Feed = State.Feed;
 				motion.Rapid = MotionMode == 0;
 
-				State.Commands.Add(motion);
+				Commands.Add(motion);
 				State.Position = EndPos;
 				return;
 			}
@@ -445,7 +448,7 @@ namespace OpenCNCPilot.GCode
 			arc.V = V;
 			arc.Plane = State.Plane;
 
-			State.Commands.Add(arc);
+			Commands.Add(arc);
 			State.Position = EndPos;
 			return;
 		}

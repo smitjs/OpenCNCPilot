@@ -1,20 +1,8 @@
-﻿#define testing
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using OpenCNCPilot.GCode;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace OpenCNCPilot
 {
@@ -41,8 +29,6 @@ namespace OpenCNCPilot
 			Toolpath.GetModel(ModelLine, ModelRapid, ModelArc);
 		}
 
-
-
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -64,19 +50,39 @@ namespace OpenCNCPilot
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 			ofd.Filter = "GCode|*.tap;*.nc;*.ngc|All Files|*.*";
-			ofd.FileOk += GCode_FileOk;
+			ofd.FileOk += GCode_OpenFileOk;
 			ofd.ShowDialog();
 		}
 
-		private void GCode_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+		private void MenuSaveGCode_Click(object sender, RoutedEventArgs e)
 		{
-#if !testing
+			SaveFileDialog sfd = new SaveFileDialog();
+
+			sfd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+			sfd.Filter = "GCode|*.tap;*.nc;*.ngc|All Files|*.*";
+			sfd.FileName = toolpath.FileName;
+			sfd.FileOk += GCode_SaveFileOk;
+			sfd.ShowDialog();
+		}
+
+		private void GCode_SaveFileOk(object sender, CancelEventArgs e)
+		{
 			try
-#endif
+			{
+				toolpath.Save(((SaveFileDialog)sender).FileName);
+			}
+			catch(Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
+		}
+
+		private void GCode_OpenFileOk(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			try
 			{
 				Toolpath = GCodeFile.Load(((OpenFileDialog)sender).FileName);
 			}
-#if !testing
 			catch(ParseException ex)
 			{
 				MessageBox.Show(ex.Error + " in Line " + ex.Line + 1);
@@ -85,7 +91,11 @@ namespace OpenCNCPilot
 			{
 				MessageBox.Show(ex.Message);
 			}
-#endif
+		}
+
+		private void MenuItem_Click(object sender, RoutedEventArgs e)
+		{
+
 		}
 	}
 }
