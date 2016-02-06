@@ -5,16 +5,42 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OpenCNCPilot"
         mc:Ignorable="d"
-        Title="Settings" Height="300" Width="300">
+        Title="Settings" Height="500" Width="450">
     <Grid>
-        <TabControl>
+        <TabControl Margin="5">
             <TabItem Header="General">
-				
-			</TabItem>
+                <StackPanel Margin="5">
+                    <DockPanel>
+                        <TextBlock Margin="5">External Editor</TextBlock>
+                        <TextBox Margin="5" Text="{local:SettingBinding ExternalEditorCommandLine}" TextAlignment="Right"/>
+                    </DockPanel>
+                </StackPanel>
+            </TabItem>
             <TabItem Header="3D Viewport">
-                <StackPanel Orientation="Vertical">
+                <StackPanel Margin="5">
                     <CheckBox Content="Show Coordinate System" Margin="5" IsChecked="{local:SettingBinding ViewportShowCoordinateSystem}"/>
                     <CheckBox Content="Show FPS counter" Margin="5" IsChecked="{local:SettingBinding ViewportShowFpsCounter}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Width="60" Margin="5" Text="{local:SettingBinding ViewportArcSplit}"/>
+                        <TextBlock Margin="5">Arc segment length (mm, preview only)</TextBlock> 
+                    </StackPanel>
+                    <CheckBox Content="Show Grid" Margin="5" IsChecked="{local:SettingBinding ViewportShowGrid}"/>
+                    <GroupBox IsEnabled="{local:SettingBinding ViewportShowGrid}">
+                        <StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<TextBox Width="60" Margin="5" Text="{local:SettingBinding ViewportGridMinor}"/>
+								<TextBlock Margin="5">Grid Minor Distance</TextBlock>
+							</StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<TextBox Width="60" Margin="5" Text="{local:SettingBinding ViewportGridMajor}"/>
+								<TextBlock Margin="5">Grid Major Distance</TextBlock>
+							</StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<TextBox Width="60" Margin="5" Text="{local:SettingBinding ViewportGridStroke}"/>
+								<TextBlock Margin="5">Grid Stroke Width</TextBlock>
+							</StackPanel>
+                        </StackPanel>
+                    </GroupBox>
                 </StackPanel>
 			</TabItem>
             <TabItem Header="Connection">

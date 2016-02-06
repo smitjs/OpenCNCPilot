@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="HelixToolkit, Version=2015.1.686.0, Culture=neutral, PublicKeyToken=52aa3500039caf0d, processorArchitecture=MSIL">
       <HintPath>..\packages\HelixToolkit.2015.1.686\lib\portable-net4+sl4+wp71+win8\HelixToolkit.dll</HintPath>
@@ -63,11 +66,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Settings.cs" />
+    <Compile Include="GCode\GCodeCommands\Arc.cs" />
+    <Compile Include="GCode\GCodeCommands\Command.cs" />
+    <Compile Include="GCode\GCodeCommands\Line.cs" />
+    <Compile Include="GCode\GCodeCommands\MCode.cs" />
+    <Compile Include="GCode\GCodeCommands\Motion.cs" />
+    <Compile Include="GCode\GCodeFile.cs" />
+    <Compile Include="GCode\GCodeParser.cs" />
+    <Compile Include="GCode\ParseException.cs" />
+    <Compile Include="GCode\Vector3.cs" />
     <Compile Include="SettingsBinding.cs" />
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Util\GrblErrorProvider.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -112,6 +124,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GrblErrors.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

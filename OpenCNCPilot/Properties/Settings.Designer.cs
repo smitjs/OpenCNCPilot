@@ -82,5 +82,89 @@ namespace OpenCNCPilot.Properties {
                 this["ViewportShowFpsCounter"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("notepad {0}")]
+        public string ExternalEditorCommandLine {
+            get {
+                return ((string)(this["ExternalEditorCommandLine"]));
+            }
+            set {
+                this["ExternalEditorCommandLine"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public double ViewportArcSplit {
+            get {
+                return ((double)(this["ViewportArcSplit"]));
+            }
+            set {
+                this["ViewportArcSplit"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.05")]
+        public double ViewportGridStroke {
+            get {
+                return ((double)(this["ViewportGridStroke"]));
+            }
+            set {
+                this["ViewportGridStroke"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public double ViewportGridMinor {
+            get {
+                return ((double)(this["ViewportGridMinor"]));
+            }
+            set {
+                this["ViewportGridMinor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public double ViewportGridMajor {
+            get {
+                return ((double)(this["ViewportGridMajor"]));
+            }
+            set {
+                this["ViewportGridMajor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ViewportShowGrid {
+            get {
+                return ((bool)(this["ViewportShowGrid"]));
+            }
+            set {
+                this["ViewportShowGrid"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public byte OutputDecimalDigits {
+            get {
+                return ((byte)(this["OutputDecimalDigits"]));
+            }
+            set {
+                this["OutputDecimalDigits"] = value;
+            }
+        }
     }
 }

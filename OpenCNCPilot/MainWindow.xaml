@@ -22,17 +22,25 @@
         </Grid.ColumnDefinitions>
         <GridSplitter Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch"/>
         <Menu Grid.Row="0" Grid.ColumnSpan="3">
-            <MenuItem Header="File">
-				
-			</MenuItem>
+            <MenuItem Header="GCode">
+                <MenuItem Header="Open" Click="MenuOpenGCode_Click"/>
+                <MenuItem Header="Save" Click="MenuSaveGCode_Click"/>
+                <MenuItem Header="View in Editor"/>
+            </MenuItem>
+            <MenuItem Header="HeightMap">
+                <MenuItem Header="Open"/>
+                <MenuItem Header="Save"/>
+                <MenuItem Header="Create"/>
+                <MenuItem Header="Generate"/>
+            </MenuItem>
             <MenuItem Header="Machine">
-				
-			</MenuItem>
+
+            </MenuItem>
             <MenuItem Header="Settings" Click="Settings_Click"/>
             <MenuItem Header="About">
-				
-			</MenuItem>
-		</Menu>
+
+            </MenuItem>
+        </Menu>
         <h:HelixViewport3D
 			Name="viewport"
 			Grid.Row="1"
@@ -40,10 +48,23 @@
 			ShowFrameRate="{local:SettingBinding ViewportShowFpsCounter}"
 			ShowViewCube="False">
             <h:HelixViewport3D.Camera>
-                <PerspectiveCamera Position="5, -15, 25" LookDirection="-5, 15,-25" UpDirection="0,0,1"/>
+                <PerspectiveCamera
+					Position="5, -15, 25"
+					LookDirection="-5, 15,-25"
+					UpDirection="0,0,1"/>
             </h:HelixViewport3D.Camera>
             <h:DefaultLights/>
             <h:CoordinateSystemVisual3D ArrowLengths="3"/>
+            <h:LinesVisual3D Thickness="0.5" Color="Gray" x:Name="ModelRapid"/>
+            <h:LinesVisual3D Thickness="1" Color="Black" x:Name="ModelLine"/>
+            <h:LinesVisual3D Thickness="1" Color="Blue" x:Name="ModelArc"/>
+            <h:GridLinesVisual3D 
+				x:Name="ModelGrid"
+				MinorDistance="{local:SettingBinding ViewportGridMinor}"
+				MajorDistance="{local:SettingBinding ViewportGridMajor}"
+				Thickness="{local:SettingBinding ViewportGridStroke}"
+				Visible="{local:SettingBinding ViewportShowGrid}"
+				Width="10" Length="10"/>
         </h:HelixViewport3D>
     </Grid>
 </Window>
