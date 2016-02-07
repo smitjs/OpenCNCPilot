@@ -74,7 +74,9 @@
     <Compile Include="GCode\GCodeFile.cs" />
     <Compile Include="GCode\GCodeParser.cs" />
     <Compile Include="GCode\ParseException.cs" />
-    <Compile Include="GCode\Vector3.cs" />
+    <Compile Include="Util\Vector2.cs" />
+    <Compile Include="Util\Vector3.cs" />
+    <Compile Include="HeightMap.cs" />
     <Compile Include="SettingsBinding.cs" />
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>

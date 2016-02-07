@@ -4,6 +4,7 @@ using System.Linq;
 using OpenCNCPilot.GCode.GCodeCommands;
 using System.IO;
 using System.Text.RegularExpressions;
+using OpenCNCPilot.Util;
 
 namespace OpenCNCPilot.GCode
 {
