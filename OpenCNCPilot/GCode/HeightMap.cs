@@ -5,7 +5,7 @@ using System.Windows.Media.Media3D;
 using System.Windows;
 using System;
 
-namespace OpenCNCPilot
+namespace OpenCNCPilot.GCode
 {
 	public class HeightMap
 	{

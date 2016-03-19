@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OpenCNCPilot"
+		xmlns:util="clr-namespace:OpenCNCPilot.Util"
 		xmlns:h="http://helix-toolkit.org/wpf"
         mc:Ignorable="d"
         Title="OpenCNCPilot"
@@ -44,8 +45,8 @@
         <h:HelixViewport3D
 			Name="viewport"
 			Grid.Row="1"
-			ShowCoordinateSystem="{local:SettingBinding ViewportShowCoordinateSystem}"
-			ShowFrameRate="{local:SettingBinding ViewportShowFpsCounter}"
+			ShowCoordinateSystem="{util:SettingBinding ViewportShowCoordinateSystem}"
+			ShowFrameRate="{util:SettingBinding ViewportShowFpsCounter}"
 			ShowViewCube="False">
             <h:HelixViewport3D.Camera>
                 <PerspectiveCamera
@@ -60,10 +61,10 @@
             <h:LinesVisual3D Thickness="1" Color="Blue" x:Name="ModelArc"/>
             <h:GridLinesVisual3D 
 				x:Name="ModelGrid"
-				MinorDistance="{local:SettingBinding ViewportGridMinor}"
-				MajorDistance="{local:SettingBinding ViewportGridMajor}"
-				Thickness="{local:SettingBinding ViewportGridStroke}"
-				Visible="{local:SettingBinding ViewportShowGrid}"
+				MinorDistance="{util:SettingBinding ViewportGridMinor}"
+				MajorDistance="{util:SettingBinding ViewportGridMajor}"
+				Thickness="{util:SettingBinding ViewportGridStroke}"
+				Visible="{util:SettingBinding ViewportShowGrid}"
 				Width="500" Length="500"/>
             <h:MeshGeometryVisual3D
 				x:Name="ModelHeightMap">
