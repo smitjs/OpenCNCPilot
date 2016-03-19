@@ -7,8 +7,9 @@
 		xmlns:h="http://helix-toolkit.org/wpf"
         mc:Ignorable="d"
         Title="OpenCNCPilot"
-		Width="{local:SettingBinding MainWindowWidth}"
-		Height="{local:SettingBinding MainWindowHeight}"
+		DataContext="{Binding RelativeSource={RelativeSource Self}}"
+		Width="900"
+		Height="500"
 		Closed="Window_Closed">
     <Grid>
         <Grid.RowDefinitions>
@@ -18,20 +19,19 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="5"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
         <GridSplitter Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch"/>
         <Menu Grid.Row="0" Grid.ColumnSpan="3">
             <MenuItem Header="GCode">
                 <MenuItem Header="Open" Click="MenuOpenGCode_Click"/>
                 <MenuItem Header="Save" Click="MenuSaveGCode_Click"/>
-                <MenuItem Header="View in Editor"/>
+                <MenuItem Header="View in Editor" Click="MenuViewGCode_Click"/>
             </MenuItem>
             <MenuItem Header="HeightMap">
-                <MenuItem Header="Open"/>
-                <MenuItem Header="Save"/>
-                <MenuItem Header="Create"/>
-                <MenuItem Header="Generate"/>
+                <MenuItem Header="Open" Click="MenuOpenHeightMap_Click"/>
+                <MenuItem Header="Save" Click="MenuSaveHeightMap_Click"/>
+                <MenuItem Header="Create" Click="MenuCreateHeightMap_Click"/>
             </MenuItem>
             <MenuItem Header="Machine">
 
@@ -49,12 +49,12 @@
 			ShowViewCube="False">
             <h:HelixViewport3D.Camera>
                 <PerspectiveCamera
-					Position="5, -15, 25"
-					LookDirection="-5, 15,-25"
+					Position="50, -150, 250"
+					LookDirection="-50, 150,-250"
 					UpDirection="0,0,1"/>
             </h:HelixViewport3D.Camera>
             <h:DefaultLights/>
-            <h:CoordinateSystemVisual3D ArrowLengths="3"/>
+            <h:CoordinateSystemVisual3D ArrowLengths="5"/>
             <h:LinesVisual3D Thickness="0.5" Color="Gray" x:Name="ModelRapid"/>
             <h:LinesVisual3D Thickness="1" Color="Black" x:Name="ModelLine"/>
             <h:LinesVisual3D Thickness="1" Color="Blue" x:Name="ModelArc"/>
@@ -64,7 +64,29 @@
 				MajorDistance="{local:SettingBinding ViewportGridMajor}"
 				Thickness="{local:SettingBinding ViewportGridStroke}"
 				Visible="{local:SettingBinding ViewportShowGrid}"
-				Width="10" Length="10"/>
+				Width="500" Length="500"/>
+            <h:MeshGeometryVisual3D
+				x:Name="ModelHeightMap">
+                <h:MeshGeometryVisual3D.Material>
+                    <MaterialGroup>
+                        <DiffuseMaterial>
+                            <DiffuseMaterial.Brush>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0, 1">
+                                    <LinearGradientBrush.GradientStops>
+                                        <GradientStop Color="Blue" Offset="0"/>
+                                        <GradientStop Color="Cyan" Offset="0.2"/>
+                                        <GradientStop Color="Green" Offset="0.4"/>
+                                        <GradientStop Color="Yellow" Offset="0.6"/>
+                                        <GradientStop Color="Red" Offset="0.8"/>
+                                        <GradientStop Color="Purple" Offset="1"/>
+                                    </LinearGradientBrush.GradientStops>
+                                </LinearGradientBrush>
+                            </DiffuseMaterial.Brush>
+                        </DiffuseMaterial>
+                    </MaterialGroup>
+                </h:MeshGeometryVisual3D.Material>
+            </h:MeshGeometryVisual3D>
+            <h:LinesVisual3D x:Name="ModelHeightMapBoundary" Thickness="2" Color="Lime"/>
         </h:HelixViewport3D>
     </Grid>
 </Window>

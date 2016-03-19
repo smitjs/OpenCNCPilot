@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OpenCNCPilot"
         mc:Ignorable="d"
+		Closing="Window_Closing"
         Title="Settings" Height="500" Width="450">
     <Grid>
         <TabControl Margin="5">
@@ -12,7 +13,7 @@
                 <StackPanel Margin="5">
                     <DockPanel>
                         <TextBlock Margin="5">External Editor</TextBlock>
-                        <TextBox Margin="5" Text="{local:SettingBinding ExternalEditorCommandLine}" TextAlignment="Right"/>
+                        <TextBox Margin="5" Text="{local:SettingBinding ExternalEditor}" TextAlignment="Right"/>
                     </DockPanel>
                 </StackPanel>
             </TabItem>

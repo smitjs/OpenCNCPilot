@@ -3,99 +3,158 @@ using OpenCNCPilot.GCode;
 using System;
 using System.Windows;
 using System.ComponentModel;
+using HelixToolkit.Wpf;
+using OpenCNCPilot.Util;
+using System.IO;
+using System.Windows.Media;
+using System.Windows.Media.Media3D;
 
 namespace OpenCNCPilot
 {
-	/// <summary>
-	/// Interaktionslogik für MainWindow.xaml
-	/// </summary>
 	public partial class MainWindow : Window
 	{
-		SettingsWindow SettingsWindow = new SettingsWindow();
+		OpenFileDialog openFileDialog = new OpenFileDialog() { InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) };
+		SaveFileDialog saveFileDialog = new SaveFileDialog() { InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) };
 
-		GCodeFile toolpath = GCodeFile.Empty();
-		GCodeFile Toolpath
-		{
-			get { return toolpath; }
-			set
-			{
-				toolpath = value;
-				UpdateViewport();
-			}
-		}
-
-		void UpdateViewport()
-		{
-			Toolpath.GetModel(ModelLine, ModelRapid, ModelArc);
-		}
+		GCodeFile Toolpath = GCodeFile.Empty();
+		HeightMap HMap = new HeightMap(0, 0, new Vector2(0, 0), new Vector2(0, 0));
 
 		public MainWindow()
 		{
 			InitializeComponent();
 		}
 
+		void UpdateToolpath()
+		{
+			Toolpath.GetModel(ModelLine, ModelRapid, ModelArc);
+		}
+
+		void UpdateHeightMap()
+		{
+			HMap.GetModel(ModelHeightMap, ModelHeightMapBoundary);
+		}
+
 		private void Window_Closed(object sender, EventArgs e)
 		{
 			Properties.Settings.Default.Save();
-			SettingsWindow.Close();
+			Application.Current.Shutdown();
 		}
 
 		private void Settings_Click(object sender, RoutedEventArgs e)
 		{
-			SettingsWindow.Show();
+			SettingsWindow sw = new SettingsWindow();
+			sw.ShowDialog();
 		}
+
+		#region FileIO
 
 		private void MenuOpenGCode_Click(object sender, RoutedEventArgs e)
 		{
-			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-			ofd.Filter = "GCode|*.tap;*.nc;*.ngc|All Files|*.*";
-			ofd.FileOk += GCode_OpenFileOk;
-			ofd.ShowDialog();
+			openFileDialog.Filter = Constants.FileFilterGCode;
+			openFileDialog.FileName = "";
+
+			if(openFileDialog.ShowDialog().Value)
+			{
+				try
+				{
+					Toolpath = GCodeFile.Load(openFileDialog.FileName);
+
+					UpdateToolpath();
+				}
+				catch (ParseException ex)
+				{
+					MessageBox.Show(ex.Error + " in Line " + ex.Line + 1);
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message);
+				}
+			}
 		}
 
 		private void MenuSaveGCode_Click(object sender, RoutedEventArgs e)
-		{
-			SaveFileDialog sfd = new SaveFileDialog();
+		{ 
+			saveFileDialog.Filter = Constants.FileFilterGCode;
+			saveFileDialog.FileName = Toolpath.FileName;
 
-			sfd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-			sfd.Filter = "GCode|*.tap;*.nc;*.ngc|All Files|*.*";
-			sfd.FileName = toolpath.FileName;
-			sfd.FileOk += GCode_SaveFileOk;
-			sfd.ShowDialog();
+			if(saveFileDialog.ShowDialog().Value)
+			{
+				try
+				{
+					Toolpath.Save(saveFileDialog.FileName);
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message);
+				}
+			}
 		}
 
-		private void GCode_SaveFileOk(object sender, CancelEventArgs e)
+		private void MenuOpenHeightMap_Click(object sender, RoutedEventArgs e)
 		{
+			openFileDialog.Filter = Constants.FileFilterHeightMap;
+			openFileDialog.FileName = "";
+			
+			if(openFileDialog.ShowDialog().Value)
+			{
+				try
+				{
+					HMap = HeightMap.Load(openFileDialog.FileName);
+					HMap.MapUpdated += UpdateHeightMap;
+
+					UpdateHeightMap();
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message);
+				}
+			}
+		}
+
+		private void MenuSaveHeightMap_Click(object sender, RoutedEventArgs e)
+		{
+			saveFileDialog.Filter = Constants.FileFilterHeightMap;
+			saveFileDialog.FileName = "";
+
+			if (saveFileDialog.ShowDialog().Value)
+			{
+				try
+				{
+					HMap.Save(saveFileDialog.FileName);
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message);
+				}
+			}
+		}
+
+		private void MenuViewGCode_Click(object sender, RoutedEventArgs e)
+		{
+			string path = Path.GetTempFileName();
+
 			try
 			{
-				toolpath.Save(((SaveFileDialog)sender).FileName);
-			}
-			catch(Exception ex)
+				Toolpath.Save(path);
+                System.Diagnostics.Process.Start(Properties.Settings.Default.ExternalEditor, path);
+            }
+			catch (Exception ex)
 			{
 				MessageBox.Show(ex.Message);
 			}
 		}
+		#endregion
 
-		private void GCode_OpenFileOk(object sender, System.ComponentModel.CancelEventArgs e)
+		private void MenuCreateHeightMap_Click(object sender, RoutedEventArgs e)
 		{
-			try
-			{
-				Toolpath = GCodeFile.Load(((OpenFileDialog)sender).FileName);
-			}
-			catch(ParseException ex)
-			{
-				MessageBox.Show(ex.Error + " in Line " + ex.Line + 1);
-			}
-			catch(Exception ex)
-			{
-				MessageBox.Show(ex.Message);
-			}
-		}
+			CreateHeightMapDialog chmd = new CreateHeightMapDialog();
 
-		private void MenuItem_Click(object sender, RoutedEventArgs e)
-		{
-
+			if (chmd.ShowDialog().Value)
+			{
+				HMap = chmd.OutputMap;
+				HMap.MapUpdated += UpdateHeightMap;
+				UpdateHeightMap();
+			}
 		}
 	}
 }
