@@ -63,7 +63,7 @@ namespace OpenCNCPilot
 				}
 				catch (ParseException ex)
 				{
-					MessageBox.Show(ex.Error + " in Line " + ex.Line + 1);
+					MessageBox.Show(ex.Error + " in Line " + (ex.Line + 1));
 				}
 				catch (Exception ex)
 				{
