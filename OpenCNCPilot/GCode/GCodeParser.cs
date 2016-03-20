@@ -4,6 +4,7 @@ using System.Linq;
 using OpenCNCPilot.GCode.GCodeCommands;
 using System.IO;
 using System.Text.RegularExpressions;
+using OpenCNCPilot.Util;
 
 namespace OpenCNCPilot.GCode
 {
@@ -113,7 +114,7 @@ namespace OpenCNCPilot.GCode
 
 			foreach (Match match in matches)
 			{
-				Words.Add(new Word() { Command = match.Groups[1].Value[0], Parameter = double.Parse(match.Groups[2].Value, System.Globalization.CultureInfo.InvariantCulture) });
+				Words.Add(new Word() { Command = match.Groups[1].Value[0], Parameter = double.Parse(match.Groups[2].Value, Constants.NFI) });
 			}
 
 			for (int i = 0; i < Words.Count; i++)

@@ -85,13 +85,13 @@ namespace OpenCNCPilot.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("notepad {0}")]
-        public string ExternalEditorCommandLine {
+        [global::System.Configuration.DefaultSettingValueAttribute("notepad")]
+        public string ExternalEditor {
             get {
-                return ((string)(this["ExternalEditorCommandLine"]));
+                return ((string)(this["ExternalEditor"]));
             }
             set {
-                this["ExternalEditorCommandLine"] = value;
+                this["ExternalEditor"] = value;
             }
         }
         
@@ -121,7 +121,7 @@ namespace OpenCNCPilot.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
         public double ViewportGridMinor {
             get {
                 return ((double)(this["ViewportGridMinor"]));
@@ -133,7 +133,7 @@ namespace OpenCNCPilot.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
         public double ViewportGridMajor {
             get {
                 return ((double)(this["ViewportGridMajor"]));
@@ -164,6 +164,18 @@ namespace OpenCNCPilot.Properties {
             }
             set {
                 this["OutputDecimalDigits"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Setting {
+            get {
+                return ((string)(this["Setting"]));
+            }
+            set {
+                this["Setting"] = value;
             }
         }
     }

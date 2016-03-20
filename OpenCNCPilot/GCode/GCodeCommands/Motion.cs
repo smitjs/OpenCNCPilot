@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using OpenCNCPilot.Util;
+using System.Collections.Generic;
 
 namespace OpenCNCPilot.GCode.GCodeCommands
 {

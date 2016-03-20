@@ -2,7 +2,6 @@
 
 using System;
 using System.Xml.Serialization;         // for various Xml attributes
-using System.Globalization;
 using System.Windows.Media.Media3D;
 
 #endregion
@@ -25,7 +24,7 @@ using System.Windows.Media.Media3D;
 /// </Changes>
 /// 
 
-namespace OpenCNCPilot.GCode
+namespace OpenCNCPilot.Util
 {
 	[Serializable]
 	public struct Vector3 : IComparable, IComparable<Vector3>, IEquatable<Vector3>, IFormattable

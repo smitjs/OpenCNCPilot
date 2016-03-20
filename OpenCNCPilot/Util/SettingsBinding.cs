@@ -1,6 +1,6 @@
 ﻿using System.Windows.Data;
 
-namespace OpenCNCPilot
+namespace OpenCNCPilot.Util
 {
 	public class SettingBindingExtension : Binding
 	{
