@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 using System;
 using OpenCNCPilot.GCode;
 
-namespace OpenCNCPilot
+namespace OpenCNCPilot.UI
 {
 	/// <summary>
 	/// Interaktionslogik für CreateHeightMapDialog.xaml

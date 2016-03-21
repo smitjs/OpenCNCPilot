@@ -2,14 +2,10 @@
 using OpenCNCPilot.GCode;
 using System;
 using System.Windows;
-using System.ComponentModel;
-using HelixToolkit.Wpf;
 using OpenCNCPilot.Util;
 using System.IO;
-using System.Windows.Media;
-using System.Windows.Media.Media3D;
 
-namespace OpenCNCPilot
+namespace OpenCNCPilot.UI
 {
 	public partial class MainWindow : Window
 	{
@@ -155,6 +151,11 @@ namespace OpenCNCPilot
 				HMap.MapUpdated += UpdateHeightMap;
 				UpdateHeightMap();
 			}
+		}
+
+		private void MenuItemConnect_Click(object sender, RoutedEventArgs e)
+		{
+
 		}
 	}
 }

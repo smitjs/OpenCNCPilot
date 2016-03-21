@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace OpenCNCPilot
+namespace OpenCNCPilot.UI
 {
 	/// <summary>
 	/// Interaktionslogik für SettingsWindow.xaml
@@ -24,10 +24,9 @@ namespace OpenCNCPilot
 			InitializeComponent();
 		}
 
-		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+		private void ComboBox_DropDownOpened(object sender, EventArgs e)
 		{
-			e.Cancel = true;
-			Hide();
+			(FindResource("portNames") as ObjectDataProvider).Refresh();
 		}
 	}
 }

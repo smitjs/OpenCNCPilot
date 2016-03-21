@@ -170,12 +170,60 @@ namespace OpenCNCPilot.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Setting {
+        public string SerialPort {
             get {
-                return ((string)(this["Setting"]));
+                return ((string)(this["SerialPort"]));
             }
             set {
-                this["Setting"] = value;
+                this["SerialPort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RemoteHost {
+            get {
+                return ((string)(this["RemoteHost"]));
+            }
+            set {
+                this["RemoteHost"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ConnectionType {
+            get {
+                return ((int)(this["ConnectionType"]));
+            }
+            set {
+                this["ConnectionType"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ControllerType {
+            get {
+                return ((int)(this["ControllerType"]));
+            }
+            set {
+                this["ControllerType"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int ControllerBuffer {
+            get {
+                return ((int)(this["ControllerBuffer"]));
+            }
+            set {
+                this["ControllerBuffer"] = value;
             }
         }
     }

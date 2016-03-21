@@ -1,9 +1,9 @@
-﻿<Window x:Class="OpenCNCPilot.MainWindow"
+﻿<Window x:Class="OpenCNCPilot.UI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:OpenCNCPilot"
+        xmlns:local="clr-namespace:OpenCNCPilot.UI"
 		xmlns:util="clr-namespace:OpenCNCPilot.Util"
 		xmlns:h="http://helix-toolkit.org/wpf"
         mc:Ignorable="d"
@@ -16,7 +16,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition/>
-        </Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+		</Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="5"/>
@@ -35,7 +36,16 @@
                 <MenuItem Header="Create" Click="MenuCreateHeightMap_Click"/>
             </MenuItem>
             <MenuItem Header="Machine">
-
+                <MenuItem Header="Connect" Click="MenuItemConnect_Click"/>
+                <MenuItem Header="Disconnect"/>
+            </MenuItem>
+            <MenuItem Header="Transformations">
+                <MenuItem Header="Apply HeightMap"/>
+                <MenuItem Header="Split"/>
+                <MenuItem Header="Arcs to Lines"/>
+                <MenuItem Header="Translate"/>
+                <MenuItem Header="Mirror"/>
+                <MenuItem Header="Scale Feedrate"/>
             </MenuItem>
             <MenuItem Header="Settings" Click="Settings_Click"/>
             <MenuItem Header="About">
@@ -72,7 +82,7 @@
                     <MaterialGroup>
                         <DiffuseMaterial>
                             <DiffuseMaterial.Brush>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="0, 1">
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0, 1" Opacity="0.2">
                                     <LinearGradientBrush.GradientStops>
                                         <GradientStop Color="Blue" Offset="0"/>
                                         <GradientStop Color="Cyan" Offset="0.2"/>
@@ -89,5 +99,10 @@
             </h:MeshGeometryVisual3D>
             <h:LinesVisual3D x:Name="ModelHeightMapBoundary" Thickness="2" Color="Lime"/>
         </h:HelixViewport3D>
+        <StatusBar Grid.Row="2" Grid.ColumnSpan="3">
+            <StatusBarItem>
+				
+			</StatusBarItem>
+		</StatusBar>
     </Grid>
 </Window>
